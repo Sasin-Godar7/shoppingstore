@@ -261,7 +261,7 @@ footer ul li{
             <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quia doloribus, odit maxime nostrum dolorem nihil, aliquid est reprehenderit, ex excepturi at neque. Repellendus optio a similique ipsa voluptas nesciunt minus earum. Cumque iure tempore recusandae fugit praesentium voluptatibus ducimus repellendus.</p>
             <div class="price">$260</div>
             <button>Buy Now</button>
-        </div>
+        </div>  
                 <div class="card">
             <img src="productimage/bag.jpg">
             <h3>Bag</h3>
