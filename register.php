@@ -122,6 +122,11 @@ body{
             <input type="email" name="user_email" placeholder="Enter your email" required>
         </div>
 
+               <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="user_password" placeholder="Enter your password" required>
+        </div>
+
         <div class="form-group">
             <label>Phone</label>
             <input type="text" name="user_phone" placeholder="Enter your phone number" required>
@@ -131,6 +136,7 @@ body{
             <label>Address</label>
             <input type="text" name="user_address" placeholder="Enter your address" required>
         </div>
+ 
 
         <button type="submit" name="submit" class="btn">Register</button>
 
