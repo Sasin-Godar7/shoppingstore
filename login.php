@@ -1,27 +1,35 @@
 <?php
+session_start();
 include 'config.php';
 
-if(isset($_POST['submit']))
+if(isset($_POST['login']))
 {
-    $name = $_POST['user_name'];
     $email = $_POST['user_email'];
     $password = $_POST['user_password'];
-    $address = $_POST['user_address'];
-    $phone = $_POST['user_phone'];
-    $user_type = 'user';
 
-    $sql = "INSERT INTO users(name,email,password,address,phonenum,user_type) 
-            VALUES ('$name','$email','$password','$address','$phone','$user_type')";
-
+    $sql = "SELECT * FROM users WHERE email='$email'";
     $result = mysqli_query($conn, $sql);
 
-    if(!$result)
+    if(mysqli_num_rows($result) > 0)
     {
-        echo "Error! :: " . mysqli_error($conn);
+        $row = mysqli_fetch_assoc($result);
+
+        if($password == $row['password'])   // simple check (we will improve later)
+        {
+            $_SESSION['username'] = $row['name'];
+            $_SESSION['role'] = $row['user_type'];
+
+            header("Location: index.php");
+            exit();
+        }
+        else
+        {
+            $error = "Incorrect Password!";
+        }
     }
     else
     {
-        echo "Register Successful";
+        $error = "Email not found!";
     }
 }
 ?>
@@ -30,7 +38,7 @@ if(isset($_POST['submit']))
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Register</title>
+<title>Login</title>
 
 <style>
 *{
@@ -49,7 +57,7 @@ body{
     padding:20px;
 }
 
-.register-box{
+.login-box{
     background:#fff;
     padding:30px 35px;
     width:100%;
@@ -58,7 +66,7 @@ body{
     box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
-.register-box h2{
+.login-box h2{
     text-align:center;
     margin-bottom:20px;
     color:#333;
@@ -106,68 +114,67 @@ body{
     background:#2f9cf4;
 }
 
-/* 📱 Mobile responsive */
+.error{
+    background:#ffdddd;
+    color:#d8000c;
+    padding:10px;
+    margin-bottom:15px;
+    border-radius:6px;
+    text-align:center;
+    font-size:14px;
+}
+
+.register-link{
+    text-align:center;
+    margin-top:15px;
+    font-size:14px;
+}
+
+.register-link a{
+    color:#4facfe;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.register-link a:hover{
+    text-decoration:underline;
+}
+
+/* Mobile */
 @media (max-width: 480px){
-    .register-box{
-        padding:20px 20px;
-    }
-
-    .register-box h2{
-        font-size:20px;
-    }
-
-    .form-group label{
-        font-size:13px;
-    }
-
-    .form-group input{
-        font-size:13px;
-        padding:10px;
-    }
-
-    .btn{
-        font-size:15px;
-        padding:11px;
+    .login-box{
+        padding:20px;
     }
 }
 </style>
-
 </head>
 <body>
 
-<div class="register-box">
-    <h2>Create Account</h2>
-    <form action="" method="post">
-        
-        <div class="form-group">
-            <label>Name</label>
-            <input type="text" name="user_name" placeholder="Enter your name" required>
-        </div>
+<div class="login-box">
+    <h2>Login</h2>
 
+    <?php if(isset($error)) { ?>
+        <div class="error"><?php echo $error; ?></div>
+    <?php } ?>
+
+    <form  method="post" >
+        
         <div class="form-group">
             <label>Email</label>
             <input type="email" name="user_email" placeholder="Enter your email" required>
         </div>
 
-               <div class="form-group">
+        <div class="form-group">
             <label>Password</label>
             <input type="password" name="user_password" placeholder="Enter your password" required>
         </div>
 
-        <div class="form-group">
-            <label>Phone</label>
-            <input type="text" name="user_phone" placeholder="Enter your phone number" required>
-        </div>
-
-        <div class="form-group">
-            <label>Address</label>
-            <input type="text" name="user_address" placeholder="Enter your address" required>
-        </div>
- 
-
-        <button type="submit" name="submit" class="btn">Register</button>
-
+        <button type="submit" name="login" class="btn">Login</button>
     </form>
+
+    <div class="register-link">
+        Don't have an account? <a href="register.php">Register</a>
+    </div>
 </div>
 
 </body>

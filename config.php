@@ -1,6 +1,6 @@
 <?php
 
-$conn = new mysqli(hostname: 'localhost',username:'root',password:'',database:'shoppingstore');
+$conn = new mysqli('localhost','root','sasin@123','shoppingstore');
 
 if(!$conn)
     {
