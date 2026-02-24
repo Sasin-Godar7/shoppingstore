@@ -1,3 +1,40 @@
+<?php
+include "config.php";
+if(isset($_POST['submit']))
+    {
+   
+        $email = $_POST['user_email'];
+        $password = $_POST['user_password'];
+        $sql = "select * from users where email='$email' and password ='$password' ";
+
+        $result = mysqli_query($conn,$sql);
+
+        if(mysqli_num_rows($result)>0)
+        {
+        $row=mysqli_fetch_assoc($result);
+
+        if($row["user_type"]=='admin'){
+        header('location:admin/dashboard.php');
+         }
+        if($row['user_type']=='user')
+        {
+        header('location:user/dashboard.php');
+        }
+           else
+            {
+            echo"invalid username or password";
+            }
+
+     }
+            
+
+?>
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -94,12 +131,12 @@
 
             <div class="input-box">
                 <label>Email</label>
-                <input type="email" name="email" placeholder="Enter your email" required>
+                <input type="email" name="user_email" placeholder="Enter your email" required>
             </div>
 
             <div class="input-box">
                 <label>Password</label>
-                <input type="password" name="password" placeholder="Enter your password" required>
+                <input type="password" name="user_password" placeholder="Enter your password" required>
             </div>
 
             <button type="submit" name="submit">Login</button>
