@@ -1,36 +1,36 @@
 <?php
+session_start();
 include "config.php";
+
 if(isset($_POST['submit']))
+{
+    $email = $_POST['user_email'];
+    $password = $_POST['user_password'];
+
+    $sql = "SELECT * FROM users WHERE email='$email' AND password='$password'";
+    $result = mysqli_query($conn,$sql);
+
+    if(mysqli_num_rows($result) > 0)
     {
-   
-        $email = $_POST['user_email'];
-        $password = $_POST['user_password'];
-        $sql = "select * from users where email='$email' and password ='$password' ";
+        $row = mysqli_fetch_assoc($result);
 
-        $result = mysqli_query($conn,$sql);
+        $_SESSION['username'] = $row['name'];
+        $_SESSION['role'] = $row['user_type'];
 
-        if(mysqli_num_rows($result)>0)
-        {
-        $row=mysqli_fetch_assoc($result);
-
-        if($row["user_type"]=='admin'){
-        header('location:admin/dashboard.php');
-         }
-        if($row['user_type']=='user')
-        {
-        header('location:user/dashboard.php');
+        if($row['user_type'] == 'admin'){
+            header("Location: admin/dashboard.php");
+            exit();
         }
-           else
-            {
-            echo"invalid username or password";
-            }
-
-     }
-            
-
+        else if($row['user_type'] == 'user'){
+            header("Location: userpage.php");
+            exit();
+        }
+    }
+    else{
+        echo "<script>alert('Invalid Email or Password');</script>";
+    }
+}
 ?>
-
-
 
 
 
