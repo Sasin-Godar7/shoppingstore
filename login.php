@@ -10,22 +10,23 @@ if(isset($_POST['submit']))
     $sql = "SELECT * FROM users WHERE email='$email' AND password='$password'";
     $result = mysqli_query($conn,$sql);
 
-    if(mysqli_num_rows($result) > 0)
-    {
-        $row = mysqli_fetch_assoc($result);
+ if(mysqli_num_rows($result) > 0)
+{
+    $row = mysqli_fetch_assoc($result);
 
-        $_SESSION['username'] = $row['name'];
-        $_SESSION['role'] = $row['user_type'];
+    $_SESSION['username'] = $row['name'];
+    $_SESSION['user_email'] = $row['email'];
+    $_SESSION['role'] = $row['user_type'];
 
-        if($row['user_type'] == 'admin'){
-            header("Location: admin/dashboard.php");
-            exit();
-        }
-        else if($row['user_type'] == 'user'){
-            header("Location: userpage.php");
-            exit();
-        }
+    if($row['user_type'] == 'admin'){
+        header("Location: admin/dashboard.php");
+        exit();
     }
+    else if($row['user_type'] == 'user'){
+        header("Location: index.php");
+        exit();
+    }
+}
     else{
         echo "<script>alert('Invalid Email or Password');</script>";
     }

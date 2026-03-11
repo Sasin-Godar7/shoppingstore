@@ -1,3 +1,11 @@
+<?php
+session_start();
+error_reporting(0);
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,6 +52,12 @@ nav ul li a{
 nav ul li a:hover{
     opacity:0.8;
 }
+a{
+    text-decoration:none;
+    color:black;
+    font-weight:bold;
+}
+
 
 /* ===== HERO (PROFESSIONAL) ===== */
 .hero{
@@ -211,8 +225,25 @@ footer ul li{
         <li><a href="#">Home</a></li>
         <li><a href="#">Products</a></li>
         <li><a href="#">Contact</a></li>
-        <li><a href="register.php">Register</a></li>
-        <li><a href="#">Login</a></li>
+         
+<?php
+if(isset($_SESSION['user_email'])){
+
+    echo '<li style="color:white; font-weight:bold;">Welcome, '.$_SESSION['username'].'</li>';
+
+    echo '<li>
+            <div style="color:red; background-color:yellow; height:35px; width:90px; border-radius:20px; display:flex; align-items:center; justify-content:center;">
+                <a href="logout.php" style="text-decoration:none;">Logout</a>
+            </div>
+          </li>';
+
+}else{
+
+    echo '<li><a href="register.php">Register</a></li>';
+    echo '<li><a href="login.php">Login</a></li>';
+
+}
+?>
     </ul>
 </nav>
 
@@ -261,7 +292,7 @@ footer ul li{
             <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quia doloribus, odit maxime nostrum dolorem nihil, aliquid est reprehenderit, ex excepturi at neque. Repellendus optio a similique ipsa voluptas nesciunt minus earum. Cumque iure tempore recusandae fugit praesentium voluptatibus ducimus repellendus.</p>
             <div class="price">$260</div>
             <button>Buy Now</button>
-        </div>  
+        </div>
                 <div class="card">
             <img src="productimage/bag.jpg">
             <h3>Bag</h3>
