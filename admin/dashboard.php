@@ -194,7 +194,7 @@ body{
             <li class="active"><a href="#">Dashboard</a></li>
             <li><a href="#">Users</a></li>
             <li><a href="addproduct.php">Add Products</a></li>
-            <li><a href="#">View Products</a></li>
+            <li><a href="viewproduct.php">View Products</a></li>
         </ul>
     </aside>
 

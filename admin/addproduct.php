@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'config.php';
+include "../config.php";
 
 if(!isset($_SESSION['role'])){
     header('Location: ../login.php');
@@ -20,7 +20,7 @@ if(isset($_POST['addproduct']))
         $price =$_POST['product_price'];
         $quantity =$_POST['product_quantity'];
         $image = $_FILES['product_image']['name'];
-        $img_location = $_FILES['productname']['tmp_name'];
+       $img_location = $_FILES['product_image']['tmp_name'];
         $upload_location="../image/";
         // $_FILES['product_name']={
         //     'name' = 'bag.jpg';
@@ -29,6 +29,18 @@ if(isset($_POST['addproduct']))
         //     'error' = 0,
         //     'size' = 230000
         // }
+
+
+     $sql = "insert into products(name,description,price,quantity,image) values ('$name' ,'$description' ,'$price' ,'$quantity' ,'$image')";
+     $result = mysqli_query($conn,$sql);
+
+     if($result)
+        {
+            echo"<script>alert('product added sucessfully');</script>";
+            move_uploaded_file($img_location,$upload_location.$image);
+        }
+
+
     }
 
 
@@ -266,7 +278,7 @@ if(isset($_POST['addproduct']))
 
             <!-- Form -->
             <div class="form-card">
-                <form action="" method="" enctype="multipart/form-data">
+                <form action="#" method="POST" enctype="multipart/form-data">
 
                     <div class="input-group">
                         <label>Product Name</label>
