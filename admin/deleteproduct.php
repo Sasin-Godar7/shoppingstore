@@ -13,7 +13,15 @@ if($_SESSION['role'] != 'admin'){
     exit();
 }
 
-$sql = "SELECT * FROM products";
+if(isset($_GET['product_id'])){
+      $id = $_GET['product_id'];
+}
+$sql = "delete  from products where id='$id' ";
 $result = mysqli_query($conn, $sql);
+
+if($result)
+    {
+        header("Location:viewproduct.php");
+    }
 ?>
 

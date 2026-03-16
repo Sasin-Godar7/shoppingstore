@@ -1,64 +1,3 @@
-<?php
-session_start();
-include "../config.php";
-
-if(!isset($_SESSION['role'])){
-    header('Location: ../login.php');
-    exit();
-}
-
-if($_SESSION['role'] != 'admin'){
-    header('Location: ../login.php');
-    exit();
-}
-
-
-if(isset($_POST['addproduct']))
-    {
-        $name =$_POST['product_name'];
-        $description =$_POST['product_description'];
-        $price =$_POST['product_price'];
-        $quantity =$_POST['product_quantity'];
-        $image = $_FILES['product_image']['name'];
-       $img_location = $_FILES['product_image']['tmp_name'];
-        $upload_location="../image/";
-        // $_FILES['product_name']={
-        //     'name' = 'bag.jpg';
-        //     'type' = 'image.jpg.png';
-        //     'tmp_name' = '/tmp/1234.jpg.tmp'; temporary location in stream_socket_server
-        //     'error' = 0,
-        //     'size' = 230000
-        // }
-
-
-     $sql = "insert into products(name,description,price,quantity,image) values ('$name' ,'$description' ,'$price' ,'$quantity' ,'$image')";
-     $result = mysqli_query($conn,$sql);
-
-     if($result)
-        {
-            echo"<script>alert('product added sucessfully');</script>";
-            move_uploaded_file($img_location,$upload_location.$image);
-        }
-
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-?>
-
 
 
 
@@ -261,7 +200,7 @@ if(isset($_POST['addproduct']))
                 <li><a href="dashboard.php">Dashboard</a></li>
                 <li><a href="#">Users</a></li>
                 <li class="active"><a href="#">Add Products</a></li>
-                <li><a href="viewproduct.php">View Products</a></li>
+                <li><a href="viewproduct">View Products</a></li>
             </ul>
         </aside>
 
@@ -269,7 +208,7 @@ if(isset($_POST['addproduct']))
         <div class="main">
 
             <div class="topbar">
-                <h2>Add Product</h2>
+                <h2>Edit Product</h2>
                 <div class="profile">
                     <span>Admin</span>
                     <a href="../logout.php" class="logout-btn">Logout</a>
@@ -305,7 +244,7 @@ if(isset($_POST['addproduct']))
                         <input type="file" name="product_image" accept="image/*" required>
                     </div>
 
-                    <button type="submit" name="addproduct" class="btn">Add Product</button>
+                    <button type="submit" name="addproduct" class="btn">Update Product</button>
 
                 </form>
             </div>

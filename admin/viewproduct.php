@@ -257,8 +257,9 @@ color:white;
 <td><?php echo $row['price'] ?></td>
 <td><?php echo $row['quantity'] ?></td>
 <td>
-<button class="btn edit">Edit</button>
-<a href="deleteproduct.php?product_id=<?php echo $row['id'] ?>"><button class="btn delete">Delete</button></a>
+ <a href="editproduct.php?product_id=<?php echo $row['id']?>"><button class="btn edit">Edit</button></a>
+
+<a onclick="return confirm('Are you sure to delete the product ?')" href="deleteproduct.php?product_id=<?php echo $row['id'] ?>"><button class="btn delete">Delete</button></a>
 </td>
 </tr>
 <?php } ?>
