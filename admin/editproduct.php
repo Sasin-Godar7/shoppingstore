@@ -1,4 +1,27 @@
+<?php
+session_start();
 
+include "../config.php"; // database connection
+
+if(!isset($_SESSION['role'])){
+    header('Location: ../login.php');
+    exit();
+}
+
+if($_SESSION['role'] != 'admin'){
+    header('Location: ../login.php');
+    exit();
+}
+
+if(isset($_GET['product_id']))
+    { 
+        $id = $_GET['product_id'];
+        $sql = "select * from products where id='$id'";
+        $result = mysqli_query($conn,$sql);
+        $row = mysqli_fetch_assoc($result);
+
+    }
+?>
 
 
 
@@ -200,7 +223,7 @@
                 <li><a href="dashboard.php">Dashboard</a></li>
                 <li><a href="#">Users</a></li>
                 <li class="active"><a href="#">Add Products</a></li>
-                <li><a href="viewproduct">View Products</a></li>
+                <li><a href="viewproduct.php">View Products</a></li>
             </ul>
         </aside>
 
@@ -217,34 +240,39 @@
 
             <!-- Form -->
             <div class="form-card">
-                <form action="#" method="POST" enctype="multipart/form-data">
+                <form action="editproduct.php" method="POST" enctype="multipart/form-data">
 
                     <div class="input-group">
                         <label>Product Name</label>
-                        <input type="text" name="product_name" required>
+                        <input type="text" value="<?php echo $row['name'] ?> " name="product_name" required>
                     </div>
 
                     <div class="input-group">
                         <label>Description</label>
-                        <textarea name="product_description" required></textarea>
+                        <textarea  name="product_description"  required><?php echo $row['description'] ?></textarea>
                     </div>
 
                     <div class="input-group">
                         <label>Price</label>
-                        <input type="number" name="product_price" step="0.01" required>
+                        <input type="number" value="<?php echo $row['price'] ?>" name="product_price" step="0.01"  required> 
                     </div>
 
                     <div class="input-group">
                         <label>Quantity</label>
-                        <input type="number" name="product_quantity" required>
+                        <input type="number" value="<?php echo $row['quantity'] ?>" name="product_quantity" required>
                     </div>
 
                     <div class="input-group">
-                        <label>Product Image</label>
-                        <input type="file" name="product_image" accept="image/*" required>
+                        <label>Current  Image</label>
+                          <img height="150px" width="150px" src="../image/<?php echo $row['image']?>" alt="">
                     </div>
 
-                    <button type="submit" name="addproduct" class="btn">Update Product</button>
+                    <div class="input-group">
+                        <label>Change Image</label>
+                        <input type="file" value="<?php echo $row['image'] ?> " name="product_image" accept="image/*" required>
+                    </div>
+
+                    <button type="submit" name="editproduct" class="btn">Update Product</button>
 
                 </form>
             </div>
