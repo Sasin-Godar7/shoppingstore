@@ -2,6 +2,10 @@
 session_start();
 error_reporting(0);
 
+include 'config.php';
+$sql = "SELECT * FROM products";
+$result = mysqli_query($conn, $sql);
+
 ?>
 
 
@@ -12,6 +16,7 @@ error_reporting(0);
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Ecom</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
 *{
@@ -52,12 +57,6 @@ nav ul li a{
 nav ul li a:hover{
     opacity:0.8;
 }
-a{
-    text-decoration:none;
-    color:black;
-    font-weight:bold;
-}
-
 
 /* ===== HERO (PROFESSIONAL) ===== */
 .hero{
@@ -225,25 +224,25 @@ footer ul li{
         <li><a href="#">Home</a></li>
         <li><a href="#">Products</a></li>
         <li><a href="#">Contact</a></li>
-         
-<?php
-if(isset($_SESSION['user_email'])){
+        <?php
+        if($_SESSION['user_email'] == true){
+            echo '<li style="color: white; font-weight: bold; font-size: 16px;">Welcome, ' . $_SESSION['user_name'] . '</li>';
+            echo   '<li><a href="admin/dashboard.php">Dashboard</a></li>';
 
-    echo '<li style="color:white; font-weight:bold;">Welcome, '.$_SESSION['username'].'</li>';
+            echo'<a href="" style="color:white;font-weight:bold;font-size:22px;">
+            <li class="fa-solid fa-cart-shopping"></li>
+            
+            </a>';
 
-    echo '<li>
-            <div style="color:red; background-color:yellow; height:35px; width:90px; border-radius:20px; display:flex; align-items:center; justify-content:center;">
-                <a href="logout.php" style="text-decoration:none;">Logout</a>
-            </div>
-          </li>';
 
-}else{
 
-    echo '<li><a href="register.php">Register</a></li>';
-    echo '<li><a href="login.php">Login</a></li>';
 
-}
-?>
+            echo '<li><a href="logout.php">Logout</a></li>';
+        }else{
+            echo '<li><a href="register.php">Register</a></li>';
+            echo '<li><a href="login.php">Login</a></li>';
+        }
+        ?>
     </ul>
 </nav>
 
@@ -262,68 +261,20 @@ if(isset($_SESSION['user_email'])){
     <h2>Our Products</h2>
 
     <div class="product-grid">
-        <div class="card">
-            <img src="productimage/bag.jpg">
-            <h3>Bag</h3>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Architecto deserunt cum nesciunt ab nostrum iusto, at impedit sed sint velit, corporis magnam vitae repudiandae minima eaque! Molestias atque aperiam aspernatur autem quidem, nesciunt eos quaerat ab, temporibus, repudiandae earum beatae.</p>
-            <div class="price">$50</div>
-            <button>Buy Now</button>
-        </div>
+    <?php
+    while($row = mysqli_fetch_assoc($result)){
+
+    
+    ?>
 
         <div class="card">
-            <img src="productimage/clock.jpg">
-            <h3>Clock</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis ad autem, amet sequi magnam harum est soluta aspernatur laboriosam ipsum corrupti voluptates eos, excepturi consectetur obcaecati omnis, explicabo aliquid ea dicta? Nihil mollitia veritatis placeat dolor hic velit neque quam!</p>
-            <div class="price">$130</div>
-            <button>Buy Now</button>
+            <img src="image/<?php echo $row['image'] ?>">
+            <h3><?php echo $row['name'] ?></h3>
+            <p><?php echo $row['description'] ?> </p>
+            <div class="price"><?php echo $row['price'] ?></div>
+           <a href="product_detail.php? product_id=<?php echo $row['id'] ?>"> <button>Buy Now</button></a>
         </div>
-
-        <div class="card">
-            <img src="productimage/flower.jpg">
-            <h3>Flower</h3>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatem fuga omnis aperiam impedit, odit repellendus veritatis consequatur aspernatur inventore sapiente, quas ex suscipit. Commodi doloremque aut eaque debitis, repellat ullam dolorem suscipit, eligendi libero accusantium, nemo saepe? Qui, eveniet veniam.</p>
-            <div class="price">$830</div>
-            <button>Buy Now</button>
-        </div>
-
-        <div class="card">
-            <img src="productimage/teddy.jpg">
-            <h3>Teddy</h3>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quia doloribus, odit maxime nostrum dolorem nihil, aliquid est reprehenderit, ex excepturi at neque. Repellendus optio a similique ipsa voluptas nesciunt minus earum. Cumque iure tempore recusandae fugit praesentium voluptatibus ducimus repellendus.</p>
-            <div class="price">$260</div>
-            <button>Buy Now</button>
-        </div>
-                <div class="card">
-            <img src="productimage/bag.jpg">
-            <h3>Bag</h3>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Architecto deserunt cum nesciunt ab nostrum iusto, at impedit sed sint velit, corporis magnam vitae repudiandae minima eaque! Molestias atque aperiam aspernatur autem quidem, nesciunt eos quaerat ab, temporibus, repudiandae earum beatae.</p>
-            <div class="price">$50</div>
-            <button>Buy Now</button>
-        </div>
-
-        <div class="card">
-            <img src="productimage/clock.jpg">
-            <h3>Clock</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis ad autem, amet sequi magnam harum est soluta aspernatur laboriosam ipsum corrupti voluptates eos, excepturi consectetur obcaecati omnis, explicabo aliquid ea dicta? Nihil mollitia veritatis placeat dolor hic velit neque quam!</p>
-            <div class="price">$130</div>
-            <button>Buy Now</button>
-        </div>
-
-        <div class="card">
-            <img src="productimage/flower.jpg">
-            <h3>Flower</h3>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatem fuga omnis aperiam impedit, odit repellendus veritatis consequatur aspernatur inventore sapiente, quas ex suscipit. Commodi doloremque aut eaque debitis, repellat ullam dolorem suscipit, eligendi libero accusantium, nemo saepe? Qui, eveniet veniam.</p>
-            <div class="price">$830</div>
-            <button>Buy Now</button>
-        </div>
-
-        <div class="card">
-            <img src="productimage/teddy.jpg">
-            <h3>Teddy</h3>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quia doloribus, odit maxime nostrum dolorem nihil, aliquid est reprehenderit, ex excepturi at neque. Repellendus optio a similique ipsa voluptas nesciunt minus earum. Cumque iure tempore recusandae fugit praesentium voluptatibus ducimus repellendus.</p>
-            <div class="price">$260</div>
-            <button>Buy Now</button>
-        </div>
+<?php } ?>
     </div>
 </section>
 
