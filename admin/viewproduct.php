@@ -3,15 +3,16 @@ session_start();
 
 include "../config.php"; // database connection
 
-if(!isset($_SESSION['role'])){
+if(!isset($_SESSION['user_type'])){
     header('Location: ../login.php');
     exit();
 }
 
-if($_SESSION['role'] != 'admin'){
+if($_SESSION['user_type'] != 'admin'){
     header('Location: ../login.php');
     exit();
 }
+
 
 $sql = "SELECT * FROM products";
 $result = mysqli_query($conn, $sql);

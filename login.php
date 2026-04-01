@@ -22,14 +22,14 @@ if (isset($_POST['submit'])) {
         if ($passwordValid) {
             if ($row['user_type'] == 'admin') {
                 $_SESSION['user_email'] = $email;   // ✅ Fixed: was 'user_admin'
-                $_SESSION['user_role']  = 'admin';
+                $_SESSION['user_type']  = 'admin';
                 $_SESSION['user_name']  = $row['name'];
                 $_SESSION['user_id']  = $row['id'];
                 header("Location: admin/dashboard.php");
                 exit();
             } else if ($row['user_type'] == 'user') {
                 $_SESSION['user_email'] = $email;
-                $_SESSION['user_role']  = 'user';
+                $_SESSION['user_type']  = 'user';
                 $_SESSION['user_name']  = $row['name'];
                 $_SESSION['user_id']  = $row['id'];
                 header("Location: index.php");
