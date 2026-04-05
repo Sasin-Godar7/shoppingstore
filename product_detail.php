@@ -1,7 +1,6 @@
 <?php
 session_start();
 include 'config.php';
-error_reporting(0);
 
 if(isset($_GET['product_id'])){
     $product_id = $_GET['product_id'];
@@ -9,6 +8,12 @@ if(isset($_GET['product_id'])){
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($result);
 }
+$user_id = $_SESSION['user_id'];
+$sql1 = "select count(*) as total from carts where user_id = '$user_id' ";
+$res1 = mysqli_query($conn, $sql1);
+$row1 = mysqli_fetch_assoc($res1);
+$count = $row1['total'];
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -283,15 +288,9 @@ if(isset($_GET['product_id'])){
         if($_SESSION['user_email'] == true){
             echo '<li style="color: white; font-weight: bold; font-size: 16px;">Welcome, ' . $_SESSION['user_name'] . '</li>';
             echo   '<li><a href="admin/dashboard.php">Dashboard</a></li>';
-
-                  echo'<a href="" style="color:white;font-weight:bold;font-size:22px;">
-            <li class="fa-solid fa-cart-shopping"></li>
-            
+                 echo '<a href="view_cart.php" style = "color: white; font-weight: bold; font-size: 16px;">
+            <li class= "fa-solid fa-cart-shopping"></li> '.$count.'
             </a>';
-
-               
-
-
             echo '<li><a href="logout.php">Logout</a></li>';
         }else{
             echo '<li><a href="register.php">Register</a></li>';
@@ -333,7 +332,9 @@ if(isset($_GET['product_id'])){
             <!-- Buttons -->
             <div class="buttons">
                 <a href="cart.php?product_id=<?php echo $row['id']?>"><button class="btn buy">Add to Cart</button></a>
-       </div>
+                
+            </div>
+
         </div>
 
     </div>

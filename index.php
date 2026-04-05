@@ -6,6 +6,11 @@ include 'config.php';
 $sql = "SELECT * FROM products";
 $result = mysqli_query($conn, $sql);
 
+$user_id = $_SESSION['user_id'];
+$sql1 = "select count(*) as total from carts where user_id = '$user_id' ";
+$res1 = mysqli_query($conn, $sql1);
+$row = mysqli_fetch_assoc($res1);
+$count = $row['total'];
 ?>
 
 
@@ -17,7 +22,6 @@ $result = mysqli_query($conn, $sql);
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Ecom</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
 <style>
 *{
     margin:0;
@@ -228,16 +232,13 @@ footer ul li{
         if($_SESSION['user_email'] == true){
             echo '<li style="color: white; font-weight: bold; font-size: 16px;">Welcome, ' . $_SESSION['user_name'] . '</li>';
             echo   '<li><a href="admin/dashboard.php">Dashboard</a></li>';
-
-            echo'<a href="" style="color:white;font-weight:bold;font-size:22px;">
-            <li class="fa-solid fa-cart-shopping"></li>
-            
+            echo '<a href="view_cart.php" style = "color: white; font-weight: bold; font-size: 16px; text-decoration:none;">
+            <li class= "fa-solid fa-cart-shopping"></li>
+                       '.$count.'
             </a>';
-
-
-
-
+            
             echo '<li><a href="logout.php">Logout</a></li>';
+
         }else{
             echo '<li><a href="register.php">Register</a></li>';
             echo '<li><a href="login.php">Login</a></li>';
