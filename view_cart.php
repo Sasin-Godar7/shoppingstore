@@ -333,21 +333,28 @@ $result2 = mysqli_query($conn,$sql2);
                 <td>Rs <?php echo $row2['product_price']?></td>
 
                 <td>
-                    <input type="number"
+                    <form action="update_cart.php" method="Post">
+                    <input type="number" name="updatequantity"
                         value="<?php echo $row2['quantity']?>"
                         class="quantity-box">
 
-                    <button class="update-btn">
+                        <input type="hidden" name="cart_id" value="<?php echo $row2['id'] ?>">
+
+                    <button name="update" class="update-btn">
                         Update
                     </button>
+                    </form>
                 </td>
 
                 <td><?php echo $total ?></td>
 
                 <td>
-                    <button class="remove-btn">
+                    <a href="delete_cart.php?cartid=<?php 
+                    echo $row2['id'] ?>">
+                    <button  class="remove-btn">
                         Remove
                     </button>
+                     </a>
                 </td>
 
             </tr>
