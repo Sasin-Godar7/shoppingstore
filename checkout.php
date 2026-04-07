@@ -3,11 +3,9 @@ session_start();
 error_reporting(0);
 
 include 'config.php';
-$sql = "SELECT * FROM products";
-$result = mysqli_query($conn, $sql);
+
 
 $user_id = $_SESSION['user_id'];
-
 $sql1 = "select count(*) as total from carts where user_id = '$user_id' ";
 $res1 = mysqli_query($conn, $sql1);
 $row = mysqli_fetch_assoc($res1);
@@ -16,8 +14,13 @@ $count = $row['total'];
 $sql2 = "select * from carts where user_id='$user_id' ";
 $result2 = mysqli_query($conn,$sql2);
 
-
 ?>
+
+
+
+
+
+
 
 
 
@@ -88,99 +91,106 @@ $result2 = mysqli_query($conn,$sql2);
             border-radius: 20px;
         }
 
-        /* ===== CART ===== */
+        /* CHECKOUT CONTAINER */
 
-        .cart-container {
+        .checkout-container {
             width: 85%;
             margin: auto;
-            margin-top: 80px;
-            margin-bottom: 40px;
-
-            flex: 1;
-            /* pushes footer down */
+            margin-top: 130px;
+            display: flex;
+            gap: 40px;
+            margin-bottom: 120px;
         }
 
-        .cart-title {
-            font-size: 35px;
-            margin-bottom: 25px;
-        }
+        /* SHIPPING FORM */
 
-        /* TABLE */
-
-        .cart-table {
-            width: 100%;
-            border-collapse: collapse;
+        .checkout-form {
+            width: 50%;
             background: white;
+            padding: 30px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .cart-table th {
-            background: #f3f3f3;
-            padding: 15px;
+        .checkout-form h2 {
+            margin-bottom: 20px;
+        }
+
+        .checkout-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .checkout-form input,
+        .checkout-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* ORDER SUMMARY */
+
+        .order-summary {
+            width: 50%;
+            background: white;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-summary h2 {
+            margin-bottom: 20px;
+        }
+
+        .order-summary table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .order-summary th,
+        .order-summary td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
             text-align: left;
         }
 
-        .cart-table td {
-            padding: 15px;
-            border-top: 1px solid #ddd;
+        .total {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
 
-        .cart-table img {
-            width: 70px;
+        /* PAYMENT */
+
+        .payment-method h3 {
+            margin-bottom: 10px;
         }
 
-        /* QUANTITY */
-
-        .quantity-box {
-            width: 55px;
-            padding: 6px;
-            margin-right: 10px;
+        .payment-method label {
+            display: block;
+            margin-bottom: 8px;
         }
 
-        /* BUTTONS */
+        /* BUTTON */
 
-        .update-btn {
+        .place-btn {
             background: #3498db;
             border: none;
             color: white;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .remove-btn {
-            background: #e74c3c;
-            border: none;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        /* TOTAL */
-
-        .total-row {
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        /* CHECKOUT */
-
-        .checkout-section {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 20px;
-        }
-
-        .checkout-btn {
-            background: #27ae60;
-            border: none;
-            color: white;
-            padding: 12px 25px;
+            padding: 12px;
+            width: 150px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
         }
+
+        .place-btn:hover {
+            background: #2980b9;
+        }
+
+
 
         /* ===== FOOTER ===== */
 
@@ -255,7 +265,7 @@ $result2 = mysqli_query($conn,$sql2);
 
     <!-- NAVBAR -->
 
-    <nav>
+   <nav>
 
         <h2>My Ecom</h2>
 
@@ -285,104 +295,90 @@ $result2 = mysqli_query($conn,$sql2);
 
     </nav>
 
-    <!-- CART -->
+    <!-- CHECKOUT SECTION -->
 
-    <div class="cart-container">
+    <div class="checkout-container">
 
-        <h2 class="cart-title">
-            Your Cart
-        </h2>
+        <!-- SHIPPING DETAILS -->
+        <form action="" method="" style="display: flex; width: 100%; gap: 40px;">
+            <div class="checkout-form">
 
-        <table class="cart-table">
+                <h2>Shipping Details</h2>
 
-            <tr>
-                <th>Image</th>
-                <th>Title</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
-                <th>Action</th>
-            </tr>
+                <label>Full Name</label>
+                <input name="user_name" type="text" required>
 
-            <?php
+                <label>Email</label>
+                <input name="user_email" type="email" required>
 
-            $grand_total = 0;
-           while( $row2 = mysqli_fetch_assoc($result2))
-            {
-                $total = $row2['product_price'] * $row2['quantity'];
+                <label>Phone</label>
+                <input name="user_phone" type="text" required>
+
+                <label>Address</label>
+                <input name="user_address" type="text" required>
+
+            </div>
+
+
+            <!-- ORDER SUMMARY -->
+
+            <div class="order-summary">
+
+                <h2>Order Summary</h2>
+
+                <table>
+
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                    </tr>
+
+                    <?php
+                    $grand_total = 0;
+                   while($row2 = mysqli_fetch_assoc($result2))
+                    {
+                        $total = $row2['product_price'] * $row2['quantity'];
+                        $grand_total = $grand_total + $total;
+ 
+                        ?>
+
+                        <tr>
+                            <td><?php echo $row2['product_name'] ?></td>
+                            <td><?php echo $row2['quantity'] ?></td>
+                            <td> Rs <?php echo $total ?></td>
+                        </tr>
+                        <?php } ?>
+                    
+
+                </table>
+                <div class="total">
+                    Grand Total : Rs <?php echo $grand_total?>
+                </div>
+
                 
-                $grand_total = $grand_total + $total;
 
+                <div class="payment-method">
 
-            ?>
+                    <h3>Payment Method</h3>
 
-            <tr>
+                    <label>
+                        <input type="radio" name="payment"> Cash on Delivery (COD)
+                    </label>
 
-                <td>
-                    <img src="image/<?php echo $row2['product_image']?>">
-                </td>
+                    <label>
+                        <input height="50px" width="100px" type="image" src="productimage/esewa.png" alt="">
+                    </label>
 
-                <td><?php echo $row2['product_name']?></td>
+                </div>
 
-                <td>Rs <?php echo $row2['product_price']?></td>
+                <br>
 
-                <td>
-                    <form action="update_cart.php" method="Post">
-                    <input type="number" name="updatequantity"
-                        value="<?php echo $row2['quantity']?>"
-                        class="quantity-box">
-
-                        <input type="hidden" name="cart_id" value="<?php echo $row2['id'] ?>">
-
-                    <button name="update" class="update-btn">
-                        Update
-                    </button>
-                    </form>
-                </td>
-
-                <td><?php echo $total ?></td>
-
-                <td>
-                    <a href="delete_cart.php?cartid=<?php 
-                    echo $row2['id'] ?>">
-                    <button  class="remove-btn">
-                        Remove
-                    </button>
-                     </a>
-                </td>
-
-            </tr>
-
-            <?php } ?>
-          
-
-            <tr class="total-row">
-
-                <td colspan="4">
-                    Grand Total
-                </td>
-
-                <td>
-                   Rs <?php echo $grand_total ?>
-                </td>
-
-                <td></td>
-
-            </tr>
-
-        </table>
-
-        <div class="checkout-section">
-            <a href="checkout.php">
-
-            <button class="checkout-btn">
-                Proceed to Checkout
-            </button>
-            </a>
-
-        </div>
+            </div>
+        </form>
 
     </div>
+
 
     <!-- FOOTER -->
 

@@ -14,8 +14,5 @@ if(isset($_POST['update']))
         header("Location:view_cart.php");
     }
 
-
-
-
-
+    
 ?>
