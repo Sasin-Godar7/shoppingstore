@@ -328,7 +328,7 @@ if(isset($_GET['product_id']))
 
                     <div class="input-group">
                         <label>Change Image</label>
-                        <input type="file" value="<?php echo $row['image'] ?> " name="product_image" accept="image/*" required>
+                        <input type="file" value="<?php echo $row['image'] ?> " name="product_image" accept="image/*" >
                     </div>
 
                     <button type="submit" name="editproduct" class="btn">Update Product</button>

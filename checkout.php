@@ -300,7 +300,7 @@ $result2 = mysqli_query($conn,$sql2);
     <div class="checkout-container">
 
         <!-- SHIPPING DETAILS -->
-        <form action="" method="" style="display: flex; width: 100%; gap: 40px;">
+        <form action="shipping.php" method="" style="display: flex; width: 100%; gap: 40px;">
             <div class="checkout-form">
 
                 <h2>Shipping Details</h2>
