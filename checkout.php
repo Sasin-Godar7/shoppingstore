@@ -356,6 +356,13 @@ $result2 = mysqli_query($conn,$sql2);
                     Grand Total : Rs <?php echo $grand_total?>
                 </div>
 
+                <?php
+                $transcation_uuid= uniqid();
+                $total_amount = $grand_total;
+                ?>
+                 <input type="hidden" name="total_amount" value="<?php echo $grand_total ?>" >
+                 <input type="hidden" name="transaction_uuid" value="<?php echo $transcation_uuid ?>" >
+               
                 
 
                 <div class="payment-method">
