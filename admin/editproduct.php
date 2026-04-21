@@ -1,8 +1,9 @@
 <?php
 session_start();
 
-include "../config.php"; // database connection
+include "../config.php";
 
+// auth check
 if(!isset($_SESSION['user_type'])){
     header('Location: ../login.php');
     exit();
@@ -13,75 +14,56 @@ if($_SESSION['user_type'] != 'admin'){
     exit();
 }
 
-if(isset($_GET['product_id']))
-    { 
-        $id = $_GET['product_id'];
-        $sql = "select * from products where id='$id'";
-        $result = mysqli_query($conn,$sql);
-        $row = mysqli_fetch_assoc($result);
+// get product
+if(isset($_GET['product_id'])) { 
+    $id = $_GET['product_id'];
 
+    $sql = "SELECT * FROM products WHERE id='$id'";
+    $result = mysqli_query($conn,$sql);
+    $row = mysqli_fetch_assoc($result);
+}
 
-            //after update button 
-          if(isset($_POST['editproduct']))
-        {
-            $name=$_POST['product_name'];
-            $description=$_POST['product_description'];
-            $price=$_POST['product_price'];
-            $quantity=$_POST['product_quantity'];
-             $image = $_FILES['product_image']['name'];
-              if($image)
-                {
-                     $img_location = $_FILES['product_image']['tmp_name'];
-              $upload_location="../image/";
-              // $_FILES['product_name']={
-              //     'name' = 'bag.jpg';
-              //     'type' = 'image.jpg.png';
-             //     'tmp_name' = '/tmp/1234.jpg.tmp'; temporary location in stream_socket_server
-             //     'error' = 0,
-               //     'size' = 230000
-               // }
+// update logic
+if(isset($_POST['editproduct'])) {
 
-                    $update_sql = "update products set name = '$name' ,description = '$description' , price = '$price',quantity='$quantity',image='$image'  where id='$id' ";
-            $update_result = mysqli_query($conn,$update_sql);
+    $name = $_POST['product_name'];
+    $description = $_POST['product_description'];
+    $price = $_POST['product_price'];
+    $quantity = $_POST['product_quantity'];
 
-            if($update_result)
-                {
-                    header("Location:viewproduct.php");
-                    move_uploaded_file($img_location,$upload_location.$image);
+    $image = $_FILES['product_image']['name'];
 
+    // if new image uploaded
+    if(!empty($image)) {
 
-                }
-            }
-             
+        $img_location = $_FILES['product_image']['tmp_name'];
+        $upload_location = "../image/";
 
+        // move file first
+        move_uploaded_file($img_location, $upload_location.$image);
 
-                else{
+        $update_sql = "UPDATE products 
+        SET name='$name', description='$description', price='$price', quantity='$quantity', image='$image' 
+        WHERE id='$id'";
 
-                    $update_sql = "update products set name = '$name' ,description = '$description' , price = '$price',quantity='$quantity',image='$image'  where id='$id' ";
-                     $update_result = mysqli_query($conn,$update_sql);
+    } else {
 
-                        if($update_result)
-                       {
-                         header("Location:viewproduct.php");
-                         }
-                }
+        // keep old image
+        $old_image = $row['image'];
 
-               
-
-                
-    
-        }
-
-
+        $update_sql = "UPDATE products 
+        SET name='$name', description='$description', price='$price', quantity='$quantity', image='$old_image' 
+        WHERE id='$id'";
     }
 
-   
+    $update_result = mysqli_query($conn,$update_sql);
 
-  
-
-    
+    if($update_result){
+        header("Location:viewproduct.php");
+        exit();
+    }
+}
 ?>
-
 
 
 

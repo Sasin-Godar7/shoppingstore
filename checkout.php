@@ -1,30 +1,28 @@
 <?php
 session_start();
-error_reporting(0);
+error_reporting(error_level: 0);
+include "config.php";
 
-include 'config.php';
+$user_id=$_SESSION['user_id'];
+
+$sql1="select count(*) as total from carts where user_id='$user_id' ";
+$result1=mysqli_query($conn,$sql1);
+// total
+// 6
+
+$row=mysqli_fetch_assoc($result1);
+//$row=[
+// 'total'=>6,
+//]
+
+$count=$row['total'];
+
+$sql2="select * from carts where user_id='$user_id' ";
+$result2=mysqli_query($conn,$sql2);
 
 
-$user_id = $_SESSION['user_id'];
-$sql1 = "select count(*) as total from carts where user_id = '$user_id' ";
-$res1 = mysqli_query($conn, $sql1);
-$row = mysqli_fetch_assoc($res1);
-$count = $row['total'];
-
-$sql2 = "select * from carts where user_id='$user_id' ";
-$result2 = mysqli_query($conn,$sql2);
 
 ?>
-
-
-
-
-
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -265,33 +263,34 @@ $result2 = mysqli_query($conn,$sql2);
 
     <!-- NAVBAR -->
 
-   <nav>
+    <nav>
 
         <h2>My Ecom</h2>
 
-        <ul>
-
-         <li><a href="#">Home</a></li>
+       <ul>
+        <li><a href="#">Home</a></li>
         <li><a href="#">Products</a></li>
         <li><a href="#">Contact</a></li>
-        <?php
-        if($_SESSION['user_email'] == true){
-            echo '<li style="color: white; font-weight: bold; font-size: 16px;">Welcome, ' . $_SESSION['user_name'] . '</li>';
-            echo   '<li><a href="admin/dashboard.php">Dashboard</a></li>';
-            echo '<a href="view_cart.php" style = "color: white; font-weight: bold; font-size: 16px; text-decoration:none;">
-            <li class= "fa-solid fa-cart-shopping"></li>
-                       '.$count.'
-            </a>';
-            
-            echo '<li><a href="logout.php">Logout</a></li>';
 
-        }else{
-            echo '<li><a href="register.php">Register</a></li>';
-            echo '<li><a href="login.php">Login</a></li>';
-        }
-        ?>
+        <?php if ($_SESSION['user_email']){ ?>
+        <li style= "color:white; font-weight:bold;  font-size: 20px;">Welcome <?php echo $_SESSION ['user_name']; ?>
+        </li>
+         <li><a href="admin/dashboard.php">dashboard</a></li>
+
+        <a href="view_cart.php" style="color: white; text-decoration:none; font-size: 30px;">
+        <i class="fa-solid fa-cart-shopping"></i> 
+        <?php echo $count ?>
+
+        </a>
+         
+        <a class="logout_btn" href="logout.php">logout</a>
+        <?php } else{ ?>
+        <li><a href="register.php">Register</a></li>
+        <li><a href="login.php">Login</a></li>
+        <?php } ?>
 
         </ul>
+      
 
     </nav>
 
@@ -300,7 +299,7 @@ $result2 = mysqli_query($conn,$sql2);
     <div class="checkout-container">
 
         <!-- SHIPPING DETAILS -->
-        <form action="shipping.php" method="" style="display: flex; width: 100%; gap: 40px;">
+        <form action="shipping.php" method="POST" style="display: flex; width: 100%; gap: 40px;">
             <div class="checkout-form">
 
                 <h2>Shipping Details</h2>
@@ -333,36 +332,35 @@ $result2 = mysqli_query($conn,$sql2);
                         <th>Quantity</th>
                         <th>Total</th>
                     </tr>
+                  <?php 
+                   $grand_total=0;
+                   while($row2=mysqli_fetch_assoc($result2)){
+                    $total=$row2['product_price']*$row2['quantity'];
+                  $grand_total=$grand_total + $total;
+           
+           ?>
 
-                    <?php
-                    $grand_total = 0;
-                   while($row2 = mysqli_fetch_assoc($result2))
-                    {
-                        $total = $row2['product_price'] * $row2['quantity'];
-                        $grand_total = $grand_total + $total;
- 
-                        ?>
+
 
                         <tr>
                             <td><?php echo $row2['product_name'] ?></td>
                             <td><?php echo $row2['quantity'] ?></td>
-                            <td> Rs <?php echo $total ?></td>
+                            <td> RS <?php echo $total ?></td>
                         </tr>
-                        <?php } ?>
+                        <?php }?>
                     
-
                 </table>
                 <div class="total">
-                    Grand Total : Rs <?php echo $grand_total?>
+                    Grand Total :RS <?php echo $grand_total ?>
                 </div>
+                  <?php
+                  $transaction_uuid=uniqid();
+                  $total_amount=$grand_total;
 
-                <?php
-                $transcation_uuid= uniqid();
-                $total_amount = $grand_total;
-                ?>
-                 <input type="hidden" name="total_amount" value="<?php echo $grand_total ?>" >
-                 <input type="hidden" name="transaction_uuid" value="<?php echo $transcation_uuid ?>" >
-               
+                  ?>
+                <input type="hidden" name="total_amount" value="<?php echo $total_amount ?>">
+                <input type="hidden" name=" transaction_uuid" value="<?php echo $transaction_uuid ?>">
+                
                 
 
                 <div class="payment-method">
@@ -370,11 +368,14 @@ $result2 = mysqli_query($conn,$sql2);
                     <h3>Payment Method</h3>
 
                     <label>
-                        <input type="radio" name="payment"> Cash on Delivery (COD)
+                        <button type="submit" name="payment" value="cod"> Cash on Delivery (COD)</button>
                     </label>
+                
 
                     <label>
-                        <input height="50px" width="100px" type="image" src="productimage/esewa.png" alt="">
+                        <button type="submit" style="background:none; border:none;" name="payment" value="esewa"></button>
+                        <img src="productimage/esewa.png"  alt="" style="height:50px; width:100px; cursor:pointer;">
+                        <!-- <input height="50px" width="100px" type="image" src="productimage/esewa.png" alt=""> -->
                     </label>
 
                 </div>
@@ -382,6 +383,7 @@ $result2 = mysqli_query($conn,$sql2);
                 <br>
 
             </div>
+
         </form>
 
     </div>

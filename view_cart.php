@@ -261,9 +261,9 @@ $result2 = mysqli_query($conn,$sql2);
 
         <ul>
 
-         <li><a href="#">Home</a></li>
-        <li><a href="#">Products</a></li>
-        <li><a href="#">Contact</a></li>
+         <li><a href="index.php">Home</a></li>
+        <li><a href="product.php">Products</a></li>
+        <li><a href="contact.php">Contact</a></li>
         <?php
         if($_SESSION['user_email'] == true){
             echo '<li style="color: white; font-weight: bold; font-size: 16px;">Welcome, ' . $_SESSION['user_name'] . '</li>';
