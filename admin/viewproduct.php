@@ -216,6 +216,7 @@ color:white;
 <li><a href="#">Users</a></li>
 <li><a href="addproduct.php">Add Products</a></li>
 <li><a href="viewproduct.php">View Products</a></li>
+    <li><a href="vieworder.php">View Order</a></li>
 </ul>
 
 </div>

@@ -1,7 +1,7 @@
 <?php
 session_start();
-include "../config.php";
 
+include "../config.php"; // database connection
 
 if(!isset($_SESSION['user_type'])){
     header('Location: ../login.php');
@@ -13,44 +13,8 @@ if($_SESSION['user_type'] != 'admin'){
     exit();
 }
 
-if(isset($_POST['addproduct']))
-    {
-        $name =$_POST['product_name'];
-        $description =$_POST['product_description'];
-        $price =$_POST['product_price'];
-        $quantity =$_POST['product_quantity'];
-        $image = $_FILES['product_image']['name'];
-       $img_location = $_FILES['product_image']['tmp_name'];
-        $upload_location="../image/";
-        // $_FILES['product_name']={
-        //     'name' = 'bag.jpg';
-        //     'type' = 'image.jpg.png';
-        //     'tmp_name' = '/tmp/1234.jpg.tmp'; temporary location in stream_socket_server
-        //     'error' = 0,
-        //     'size' = 230000
-        // }
-
-
-     $sql = "insert into products(name,description,price,quantity,image) values ('$name' ,'$description' ,'$price' ,'$quantity' ,'$image')";
-     $result = mysqli_query($conn,$sql);
-
-     if($result)
-        {
-            echo"<script>alert('product added sucessfully');</script>";
-            move_uploaded_file($img_location,$upload_location.$image);
-        }
-
-
-    }
-
-
-
-
-
-
-
-
-
+$sql = "select * from orders";
+$result = mysqli_query($conn,$sql);
 
 
 
@@ -61,18 +25,13 @@ if(isset($_POST['addproduct']))
 
 
 
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Product</title>
+    <title>View Orders</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
@@ -234,6 +193,104 @@ if(isset($_POST['addproduct']))
             background: #1e40af;
         }
 
+        /*order table*/
+        .orders-card {
+            margin-top: 30px;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .orders-card h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #111827;
+        }
+
+        /* Table wrapper for scroll */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th {
+            background: #111827;
+            color: white;
+            padding: 12px;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        /* Hover effect */
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        /* Badges */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge.pending {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .badge.paid {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            text-decoration: none;
+            color: white;
+            margin-right: 5px;
+            display: inline-block;
+        }
+
+        .btn.view {
+            background: #3b82f6;
+        }
+
+        .btn.view:hover {
+            background: #2563eb;
+        }
+
+        .btn.paid {
+            background: #10b981;
+        }
+
+        .btn.paid:hover {
+            background: #059669;
+        }
+
+        /* Address column */
+        td:nth-child(5) {
+            max-width: 180px;
+            white-space: normal;
+        }
+
         /* Responsive */
         @media(max-width:768px) {
             .sidebar {
@@ -260,9 +317,9 @@ if(isset($_POST['addproduct']))
             <ul class="menu">
                 <li><a href="dashboard.php">Dashboard</a></li>
                 <li><a href="#">Users</a></li>
-                <li class="active"><a href="#">Add Products</a></li>
+                <li class="active"><a href="addproduct.php">Add Products</a></li>
                 <li><a href="viewproduct.php">View Products</a></li>
-                    <li><a href="vieworder.php">View Order</a></li>
+                <li><a href="vieworder.php">View Orders</a></li>
             </ul>
         </aside>
 
@@ -270,47 +327,65 @@ if(isset($_POST['addproduct']))
         <div class="main">
 
             <div class="topbar">
-                <h2>Add Product</h2>
+                <h2>View Orders</h2>
                 <div class="profile">
                     <span>Admin</span>
                     <a href="../logout.php" class="logout-btn">Logout</a>
                 </div>
             </div>
 
-            <!-- Form -->
-            <div class="form-card">
-                <form action="#" method="POST" enctype="multipart/form-data">
+            <!-- view orders -->
 
-                    <div class="input-group">
-                        <label>Product Name</label>
-                        <input type="text" name="product_name" required>
-                    </div>
+            <div class="orders-card">
 
-                    <div class="input-group">
-                        <label>Description</label>
-                        <textarea name="product_description" required></textarea>
-                    </div>
+                <h3>All Orders</h3>
 
-                    <div class="input-group">
-                        <label>Price</label>
-                        <input type="number" name="product_price" step="0.01" required>
-                    </div>
+                <div class="table-wrapper">
 
-                    <div class="input-group">
-                        <label>Quantity</label>
-                        <input type="number" name="product_quantity" required>
-                    </div>
+                    <table>
 
-                    <div class="input-group">
-                        <label>Product Image</label>
-                        <input type="file" name="product_image" accept="image/*" required>
-                    </div>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>User ID</th>
+                            <th>Customer</th>
+                            <th>Contact</th>
+                            <th>Shipping Address</th>
+                            <th>Amount</th>
+                            <th>Payment</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
 
-                    <button type="submit" name="addproduct" class="btn">Add Product</button>
+                        <!-- SAMPLE ROW (PHP loop yeta run garne) -->
+                    <?php while($row=mysqli_fetch_assoc($result)) {?>                                  
 
-                </form>
+                          <tr>
+                            <td>#<?php echo $row['id'] ?></td>
+                            <td><?php echo $row['user_id'] ?></td>
+                            <td><?php echo $row['name'] ?></td>
+                            <td>
+                                <?php echo $row['email'] ?> <br>
+                               <?php echo $row['phone'] ?>
+                            </td>
+                            <td style="max-width:180px;">
+                                <?php echo $row['address'] ?>
+                            </td>
+                            <td><?php echo $row['total_amount'] ?></td>
+                            <td><?php echo $row['payment_method'] ?></td>
+                            <td>
+                                <span class="badge pending"><?php echo $row['payment_status'] ?></span>
+                            </td>
+                            <td>
+                                <a class="btn view" href="order_detail.php">View</a>
+                            </td>
+                        </tr> 
+                        <?php } ?> 
+
+                    </table>
+
+                </div>
+
             </div>
-
         </div>
 
     </div>
