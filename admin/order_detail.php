@@ -1,7 +1,8 @@
+
 <?php
 session_start();
+include "../config.php";
 
-include "../config.php"; // database connection
 
 if(!isset($_SESSION['user_type'])){
     header('Location: ../login.php');
@@ -12,18 +13,7 @@ if($_SESSION['user_type'] != 'admin'){
     header('Location: ../login.php');
     exit();
 }
-
-$sql = "select * from orders";
-$result = mysqli_query($conn,$sql);
-
-
-
-
-
-
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -46,6 +36,96 @@ $result = mysqli_query($conn,$sql);
         body {
             background: #f4f6f9;
         }
+        ontainer */
+.container{
+    width:90%;
+    margin:auto;
+    padding:30px 0;
+}
+
+/* Title */
+.page-title{
+    font-size:22px;
+    font-weight:bold;
+    margin-bottom:20px;
+    color:#111827;
+}
+
+/* Grid */
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+/* Card */
+.card{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.05);
+    margin-top:25px;
+}
+
+/* Labels */
+.label{
+    font-size:12px;
+    color:#6b7280;
+    margin-top:10px;
+}
+
+.value{
+    font-size:14px;
+    font-weight:500;
+    color:#111827;
+    margin-bottom:8px;
+}
+
+/* Badge */
+.badge{
+    display:inline-block;
+    padding:5px 12px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.pending{
+    background:#fee2e2;
+    color:#dc2626;
+}
+
+.paid{
+    background:#dcfce7;
+    color:#16a34a;
+}
+
+/* Table */
+.table-card{
+    margin-top:20px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+
+th{
+    background:#111827;
+    color:white;
+    padding:12px;
+}
+
+td{
+    padding:12px;
+    border-bottom:1px solid #eee;
+}
+
+tr:hover{
+    background:#f9fafb;
+}
+
 
         /* Layout */
         .dashboard {
@@ -194,102 +274,7 @@ $result = mysqli_query($conn,$sql);
         }
 
         /*order table*/
-        .orders-card {
-            margin-top: 30px;
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-        }
-
-        .orders-card h3 {
-            margin-bottom: 15px;
-            font-size: 18px;
-            color: #111827;
-        }
-
-        /* Table wrapper for scroll */
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
-        /* Table */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 900px;
-        }
-
-        th {
-            background: #111827;
-            color: white;
-            padding: 12px;
-            font-size: 13px;
-            text-transform: uppercase;
-        }
-
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #eee;
-            font-size: 14px;
-            color: #374151;
-        }
-
-        /* Hover effect */
-        tr:hover {
-            background: #f9fafb;
-        }
-
-        /* Badges */
-        .badge {
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .badge.pending {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-
-        .badge.paid {
-            background: #dcfce7;
-            color: #16a34a;
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-size: 12px;
-            text-decoration: none;
-            color: white;
-            margin-right: 5px;
-            display: inline-block;
-        }
-
-        .btn.view {
-            background: #3b82f6;
-        }
-
-        .btn.view:hover {
-            background: #2563eb;
-        }
-
-        .btn.paid {
-            background: #10b981;
-        }
-
-        .btn.paid:hover {
-            background: #059669;
-        }
-
-        /* Address column */
-        td:nth-child(5) {
-            max-width: 180px;
-            white-space: normal;
-        }
+       
 
         /* Responsive */
         @media(max-width:768px) {
@@ -327,68 +312,75 @@ $result = mysqli_query($conn,$sql);
         <div class="main">
 
             <div class="topbar">
-                <h2>View Orders</h2>
+                <h2>Order Details</h2>
                 <div class="profile">
                     <span>Admin</span>
                     <a href="../logout.php" class="logout-btn">Logout</a>
                 </div>
             </div>
 
-            <!-- view orders -->
+            <!-- order details -->
+             <div class="container">
 
-            <div class="orders-card">
 
-                <h3>All Orders</h3>
+    <!-- TOP GRID -->
+    <div class="grid">
 
-                <div class="table-wrapper">
+        <!-- CUSTOMER INFO -->
+        <div class="card">
+            <div class="label">Customer Name</div>
+            <div class="value">John Doe</div>
 
-                    <table>
+            <div class="label">Email</div>
+            <div class="value">john@gmail.com</div>
 
-                        <tr>
-                            <th>Order ID</th>
-                            <th>User ID</th>
-                            <th>Customer</th>
-                            <th>Contact</th>
-                            <th>Shipping Address</th>
-                            <th>Amount</th>
-                            <th>Payment</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
+            <div class="label">Phone</div>
+            <div class="value">9800000000</div>
+        </div>
 
-                        <!-- SAMPLE ROW (PHP loop yeta run garne) -->
-                    <?php while($row=mysqli_fetch_assoc($result)) {?>                                  
+        <!-- SHIPPING INFO -->
+        <div class="card">
+            <div class="label">Shipping Address</div>
+            <div class="value">Kathmandu, Nepal</div>
 
-                          <tr>
-                            <td>#<?php echo $row['id'] ?></td>
-                            <td><?php echo $row['user_id'] ?></td>
-                            <td><?php echo $row['name'] ?></td>
-                            <td>
-                                <?php echo $row['email'] ?> <br>
-                               <?php echo $row['phone'] ?>
-                            </td>
-                            <td style="max-width:180px;">
-                                <?php echo $row['address'] ?>
-                            </td>
-                            <td><?php echo $row['total_amount'] ?></td>
-                            <td><?php echo $row['payment_method'] ?></td>
-                            <td>
-                                <span class="badge pending"><?php echo $row['payment_status'] ?></span>
-                            </td>
-                            <td>
-                                <a class="btn view" href="order_detail.php">View</a>
-                                <?php if($row['payment_method']=="cod" && $row['payment_status']=="pending"){?>
-                                <a class="btn paid" href="update_status.php?id=<?php echo $row['id']?>"> Mark Paid</a>
-                                <?php } ?>
-                            </td>
-                        </tr> 
-                        <?php } ?> 
+            <div class="label">Payment Method</div>
+            <div class="value">Cash On Delivery</div>
 
-                    </table>
+            <div class="label">Payment Status</div>
+            <span class="badge pending">Pending</span>
+        </div>
 
-                </div>
+    </div>
 
-            </div>
+    <!-- PRODUCTS -->
+    <div class="card table-card">
+
+        <h3>Ordered Products</h3>
+
+        <table>
+
+            <tr>
+                <th>Product ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total Price</th>
+            </tr>
+
+            <tr>
+                <td> 14</td>
+                <td>iPhone 14</td>
+                <td>Rs. 60</td>
+                <td>3</td>
+                <td>1800</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+</div>
+
         </div>
 
     </div>
