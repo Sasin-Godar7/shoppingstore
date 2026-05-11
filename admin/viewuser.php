@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 include "../config.php"; // database connection
 
 if(!isset($_SESSION['user_type'])){
@@ -13,12 +12,10 @@ if($_SESSION['user_type'] != 'admin'){
     exit();
 }
 
+$sql = "select * from users where user_type='user' ";
+$result = mysqli_query($conn,$sql);
 
-$sql = "SELECT * FROM products";
-$result = mysqli_query($conn, $sql);
 ?>
-
-
 
 
 <!DOCTYPE html>
@@ -26,7 +23,7 @@ $result = mysqli_query($conn, $sql);
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>View Products</title>
+<title>View Users</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
@@ -154,30 +151,6 @@ tbody tr:hover{
 background:#f9fafb;
 }
 
-/* Description column */
-
-.description{
-max-width:300px;
-/* white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis; */
-}
-.name{
-  max-width:150px;
-  
-}
-
-/* Image */
-
-img{
-width:120px;
-height:120px;
-border-radius:6px;
-object-fit:cover;
-}
-
-/* Buttons */
-
 .btn{
 padding:6px 12px;
 border:none;
@@ -185,11 +158,6 @@ border-radius:6px;
 cursor:pointer;
 font-size:14px;
 margin-right:5px;
-}
-
-.edit{
-background:#3b82f6;
-color:white;
 }
 
 .delete{
@@ -213,10 +181,11 @@ color:white;
 
 <ul class="menu">
 <li><a href="dashboard.php">Dashboard</a></li>
-<li><a href="viewuser.php">Users</a></li>
+<li><a href="#">Users</a></li>
 <li><a href="addproduct.php">Add Products</a></li>
 <li><a href="viewproduct.php">View Products</a></li>
-    <li><a href="vieworder.php">View Order</a></li>
+<li><a href="vieworder.php">View Orders</a></li>
+
 </ul>
 
 </div>
@@ -227,7 +196,7 @@ color:white;
 <div class="main">
 
 <div class="topbar">
-<h2>View Products</h2>
+<h2>View Users</h2>
 <a href="../logout.php" class="logout-btn">Logout</a>
 </div>
 
@@ -240,33 +209,33 @@ color:white;
 
 <thead>
 <tr>
-<th>Image</th>
-<th>Name</th>
-<th>Description</th>
-<th>Price</th>
-<th>Quantity</th>
+<th>ID</th>
+<th>User Name</th>
+<th>Email</th>
+<th>Phone</th>
+<th>Address</th>
 <th>Action</th>
 </tr>
 </thead>
 
 <tbody>
-  <?php while( $row = mysqli_fetch_assoc($result)) { ?>
-
+<?php while($row=mysqli_fetch_assoc($result))  {?>
 <tr>
-<td><img src="../image/<?php echo $row['image'] ?>"></td>
+<td>#<?php echo $row['id'] ?></td>
 <td><?php echo $row['name'] ?></td>
-<td class="description"><?php echo $row['description'] ?></td>
-<td><?php echo $row['price'] ?></td>
-<td><?php echo $row['quantity'] ?></td>
+<td><?php echo $row['email'] ?></td>
+<td> <?php echo $row['phonenum'] ?> </td>
+<td><?php echo $row['address'] ?></td>
 <td>
- <a href="editproduct.php?product_id=<?php echo $row['id']?>"><button class="btn edit">Edit</button></a>
-
-<a onclick="return confirm('Are you sure to delete the product ?')" href="deleteproduct.php?product_id=<?php echo $row['id'] ?>"><button class="btn delete">Delete</button></a>
+<a href="deleteuser.php?id=<?php echo $row['id'] ?>" onclick="return confirm('Are You Sure To Delete This User')">
+    <button class="btn delete">Delete</button>
+</a>
 </td>
 </tr>
-<?php } ?>
 
 </tbody>
+<?php  } ?>
+
 
 </table>
 

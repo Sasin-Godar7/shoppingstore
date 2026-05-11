@@ -316,7 +316,7 @@ $result = mysqli_query($conn,$sql);
             <div class="logo"><a href="../index.php">ECOM ADMIN</a></div>
             <ul class="menu">
                 <li><a href="dashboard.php">Dashboard</a></li>
-                <li><a href="#">Users</a></li>
+                <li><a href="viewuser.php">Users</a></li>
                 <li class="active"><a href="addproduct.php">Add Products</a></li>
                 <li><a href="viewproduct.php">View Products</a></li>
                 <li><a href="vieworder.php">View Orders</a></li>
