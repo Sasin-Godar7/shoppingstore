@@ -11,6 +11,32 @@ if($_SESSION['user_type'] != 'admin'){
     header('Location: ../login.php');
     exit();
 }
+$user_sql = "select COUNT(*) as total_users from users where user_type='user'";
+$user_result=mysqli_query($conn,$user_sql);
+$user_row=mysqli_fetch_assoc($user_result);
+$total_users=$user_row['total_users'];
+
+$product_sql = "select COUNT(*) as total_products from products";
+$product_result = mysqli_query($conn,$product_sql);
+$product_row=mysqli_fetch_assoc($product_result);
+$total_products=$product_row['total_products'];
+
+$revenue_sql = "select SUM(total_amount) as total_revenue from orders where payment_status='paid'";
+$revenue_result = mysqli_query($conn,$revenue_sql);
+$revenue_row=mysqli_fetch_assoc($revenue_result);
+$total_revenue=$revenue_row['total_revenue'];
+
+$order_sql = "select COUNT(*) AS total_orders from orders";
+$order_result=mysqli_query($conn,$order_sql);
+$order_row=mysqli_fetch_assoc($order_result);
+$total_orders=$order_row['total_orders'];
+
+$paidorder_sql = "select COUNT(*) AS total_paidorders from orders where payment_status='paid'";
+$paidorder_result=mysqli_query($conn,$paidorder_sql);
+$paidorder_row=mysqli_fetch_assoc($paidorder_result);
+$total_paidorders=$paidorder_row['total_paidorders'];
+
+
 ?>
 
 <!DOCTYPE html>
@@ -214,15 +240,23 @@ body{
         <!-- Stats -->
         <div class="stats">
             <div class="card">
-                <h3>1,245</h3>
+                <h3><?php echo $total_users ?></h3>
                 <p>Total Users</p>
             </div>
             <div class="card">
-                <h3>320</h3>
+                <h3><?php echo $total_products ?></h3>
                 <p>Total Products</p>
             </div>
             <div class="card">
-                <h3>$8,540</h3>
+                <h3><?php echo $total_orders ?></h3>
+                <p>Total Orders</p>
+            </div>
+            <div class="card">
+                <h3><?php echo $total_paidorders ?></h3>
+                <p>Total Paid Orders</p>
+            </div>
+             <div class="card">
+                <h3>Rs <?php echo $total_revenue ?></h3>
                 <p>Total Revenue</p>
             </div>
         </div>

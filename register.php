@@ -22,6 +22,8 @@ if(isset($_POST['submit']))
     else
     {
         echo "Register Successful";
+         header("Location:login.php");
+        exit();
     }
 }
 ?>

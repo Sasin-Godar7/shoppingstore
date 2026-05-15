@@ -3,8 +3,36 @@ session_start();
 error_reporting(0);
 
 include 'config.php';
-$sql = "SELECT * FROM products";
-$result = mysqli_query($conn, $sql);
+
+if(isset($_GET['search']))
+{
+    $search_product = $_GET['searchproduct'];
+
+    $sql = "SELECT * FROM products 
+            WHERE CONCAT(name,price,description) 
+            LIKE '%$search_product%' ";
+
+    $result = mysqli_query($conn, $sql);
+}
+else
+{
+    $sql = "SELECT * FROM products";
+    $result = mysqli_query($conn, $sql);
+}
+
+
+/*=====sorting======*/
+
+if(isset($_GET['sort']) && $_GET['sort']=='low_high')
+    {
+        $sql .= "ORDER BY price ASC";  /*== mathi ko search lai  add garxa .= le ...// if search matra garyo vane search query chalx so*/
+
+    }
+    elseif(isset($_GET['sort']) && $_GET['sort']== 'high_low')
+        {
+           $sql .= "ORDER BY price DESC";   
+        }
+        $result=mysqli_query($conn,$sql);
 
 $user_id = $_SESSION['user_id'];
 $sql1 = "select count(*) as total from carts where user_id = '$user_id' ";
@@ -105,6 +133,35 @@ nav ul li a:hover{
     transform:translateY(-2px);
 }
 
+/*=======search =====*/
+.products form{
+    width: 600px;
+    margin: 0 auto 80px;
+    display:flex;
+    gap:10px;
+}
+
+
+.products form input[type="text"] {
+    flex:1;
+    padding:15px 20px;
+    border-radius:10px;
+     font-size:16px;
+}
+
+.products form input[type="submit"] {
+    padding:10px 20px;
+    background-color:"darkblue";
+    width: 100px;
+    border-radius:10px;
+    color:black;
+    font-size:14px;
+    cursor:pointer;
+}
+
+
+
+
 /* ===== PRODUCTS ===== */
 .products{
     padding:80px 70px;
@@ -193,6 +250,16 @@ footer ul li{
     font-size:14px;
     color:#aaa;
 }
+.products form select{
+    padding:10px 10px;
+    border:1px solid black;
+    border-radius:16px;
+    outline:none;
+    width: 150px;
+    font-size:16px;
+    background-color: blue;
+    color:white;
+}
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:992px){
@@ -223,8 +290,8 @@ footer ul li{
 
 <!-- NAVBAR -->
 <nav>
-    <h2>My Ecom</h2>
-    <ul>
+    <h2> <a href="index.php" style="color:White; text-decoration:none;">My Ecom</a></h2>
+        <ul>
         <li><a href="#">Home</a></li>
         <li><a href="#">Products</a></li>
         <li><a href="#">Contact</a></li>
@@ -260,6 +327,19 @@ footer ul li{
 <!-- PRODUCTS -->
 <section class="products">
     <h2>Our Products</h2>
+
+    <div>
+        <form action="" method="GET">
+          <input type="text" name="searchproduct" placeholder="Search Your Products" id="" class="searchbtn">
+         
+          <select name="sort" id="">
+            <option value="">Default</option>
+            <option value="low_high">Price: Low-High</option>
+            <option value="high_low">Price: High-Low</option>
+          </select>
+           <input type="submit" name="search" value="Search">
+        </form>
+    </div>
 
     <div class="product-grid">
     <?php
